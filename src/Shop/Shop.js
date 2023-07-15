@@ -1,6 +1,7 @@
 import './Shop.css';
 import Book from '../Book';
 import Navigation from '../Navigation';
+import { useState } from 'react';
 
 export default function Shop() 
 {
@@ -79,6 +80,7 @@ export default function Shop()
             title : "Divine Rivals",
             desc : "This is a book description temporary placeholder.",
             author : "Rebecca Ross",
+            genre : "Young Adult",
             cover : "https://storage.googleapis.com/du-prd/books/images/9781250857439.jpg",
             rating : 4.7,
             price : 17.99,
@@ -116,32 +118,82 @@ export default function Shop()
         }
     ]
 
+    const [books, setBooks] = useState(dummy_data.sort((a,b) => a.title.localeCompare(b.title)));
+    const [sortState, setSortState] = useState("title_s");
+    const [checkState, setCheckState] = useState("title");
+
+    const sortResult = (e) => {
+        setSortState(e);
+        if (e === "title_s"){
+            setBooks(books.sort((a,b) => a.title.localeCompare(b.title)));
+        }
+        
+        if (e === "priceh") {
+            setBooks(books.sort((a, b) => b.price-a.price));
+        }
+        
+        if (e === "pricel") {
+            setBooks(books.sort((a, b) => a.price-b.price));
+        }
+    }
+
+    const handleSearch = (e) => {
+        var temp = null;
+        if (checkState === "title"){
+            temp = dummy_data.filter((el) => el.title.toLowerCase().includes(e.target.value.toLowerCase()));
+        }
+
+        if (checkState === "author"){
+            temp = dummy_data.filter((el) => el.author.toLowerCase().includes(e.target.value.toLowerCase()));
+        }
+
+        if (checkState === "genre"){
+            temp = dummy_data.filter((el) => el.genre.toLowerCase().includes(e.target.value.toLowerCase()));
+        }
+
+        // Sort by
+        if (sortState === "title_s"){
+            temp = temp.sort((a,b) => a.title.localeCompare(b.title));
+        }
+        
+        if (sortState === "priceh") {
+            temp = temp.sort((a, b) => b.price-a.price);
+        }
+        
+        if (sortState === "pricel") {
+            temp = temp.sort((a, b) => a.price-b.price);
+        }
+
+        setBooks(temp);
+    }
+
     return (<>
     <Navigation />
     <div className='search-container'>
-        <input className='searchbar' type='text' placeholder='Search'/>
+        <input className='searchbar' type='text' placeholder='Search' onChange={handleSearch}></input>
 
         <div className='search-criteria'>
             <h3>Search by:</h3>
-            <input type="checkbox" id="genre" name="genre" />
-            <label htmlFor="genre">Genre</label>
-            <input type="checkbox" id="author" name="author" />
-            <label htmlFor="author">Author</label>
-            <input type="checkbox" id="title" name="title" />
+            <input type="radio" id="title" name="title" checked={checkState === "title"} onClick={(e) => setCheckState(e.target.id)}/>
             <label htmlFor="title">Title</label>
+            <input type="radio" id="author" name="author" checked={checkState === "author"} onClick={(e) => setCheckState(e.target.id)}/>
+            <label htmlFor="author">Author</label>
+            <input type="radio" id="genre" name="genre" checked={checkState === "genre"} onClick={(e) => setCheckState(e.target.id)}/>
+            <label htmlFor="genre">Genre</label>
+
 
             <h3>Sort by:</h3>
-            <input type="checkbox" id="priceh" name="priceh" />
-            <label htmlFor="priceh">Price (high-low)</label>
-            <input type="checkbox" id="pricel" name="pricel" />
-            <label htmlFor="pricel">Price (low-high)</label>
-            <input type="checkbox" id="title_s" name="title_s" />
+            <input type="radio" id="title_s" name="sort" checked={sortState === "title_s"} onClick={(e) => sortResult(e.target.id)}/>
             <label htmlFor="title_s">Title (a-z)</label>
+            <input type="radio" id="priceh" name="sort" checked={sortState === "priceh"} onClick={(e) => sortResult(e.target.id)}/>
+            <label htmlFor="priceh">Price (high-low)</label>
+            <input type="radio" id="pricel" name="sort" checked={sortState === "pricel"} onClick={(e) => sortResult(e.target.id)}/>
+            <label htmlFor="pricel">Price (low-high)</label>
         </div>
     </div>
 
     <div className='shop-display'>
-        {dummy_data.map((book, k)=>
+        {books.map((book, k)=>
         <Book key={k}
             title={book.title}
             author={book.author}
