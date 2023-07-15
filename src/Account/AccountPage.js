@@ -1,11 +1,20 @@
 import './AccountPage.css';
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import Navigation from '../Navigation';
 import Card from '../Card'
 
 export default function AccountPage() 
 {
+    const token = sessionStorage.getItem("token");
+    const navigate = useNavigate();
+    useEffect(() => {
+        if(token == null) {
+            navigate(-1);
+        }
+    });
+    
+
     const [ editInfo, setEditInfo ] = useState(false);
     const [ editPaym, setEditPaym ] = useState(false);
     const [ editAddr, setEditAddr ] = useState(false);

@@ -1,11 +1,29 @@
 import './Navigation.css';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 export default function Nagivation(props)
 {
-    let loggedIn = false; // temp value to manually update for viewing account stuff
+    const [loggedIn, setLoggedInState] = useState(sessionStorage.getItem("token") != null);
+
+    // Temporary login toggle
+    // TODO: Implement token check or something.
+    function toggleLoggedInState() {
+        if(sessionStorage.getItem("token") != null) {
+            logOut();
+        } else {
+            sessionStorage.setItem("token", 'example token');
+        }
+        setLoggedInState(!loggedIn);
+    }
+
+    function logOut() {
+        sessionStorage.removeItem("token");
+        setLoggedInState(false);
+    }
 
     return (<>
+    <button onClick={toggleLoggedInState}>Switch Logged In State</button>
     <div className='nav-bar'>
         <p className='home-button'>
             <Link className='nav-link' to='/'>Home</Link>
@@ -25,7 +43,7 @@ export default function Nagivation(props)
                     <Link className='nav-link' to='/Account'>Account</Link>
                 </li>
                 <li key='logout'>
-                    <button className='nav-button'>Logout</button>
+                    <button className='nav-button' onClick={logOut}>Logout</button>
                 </li>
                 </>    
                 :

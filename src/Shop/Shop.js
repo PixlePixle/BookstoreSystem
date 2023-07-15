@@ -124,19 +124,19 @@ export default function Shop()
         <div className='search-criteria'>
             <h3>Search by:</h3>
             <input type="checkbox" id="genre" name="genre" />
-            <label for="genre">Genre</label>
+            <label htmlFor="genre">Genre</label>
             <input type="checkbox" id="author" name="author" />
-            <label for="author">Author</label>
+            <label htmlFor="author">Author</label>
             <input type="checkbox" id="title" name="title" />
-            <label for="title">Title</label>
+            <label htmlFor="title">Title</label>
 
             <h3>Sort by:</h3>
             <input type="checkbox" id="priceh" name="priceh" />
-            <label for="priceh">Price (high-low)</label>
+            <label htmlFor="priceh">Price (high-low)</label>
             <input type="checkbox" id="pricel" name="pricel" />
-            <label for="pricel">Price (low-high)</label>
+            <label htmlFor="pricel">Price (low-high)</label>
             <input type="checkbox" id="title_s" name="title_s" />
-            <label for="title_s">Title (a-z)</label>
+            <label htmlFor="title_s">Title (a-z)</label>
         </div>
     </div>
 
